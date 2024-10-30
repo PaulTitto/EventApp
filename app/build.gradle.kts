@@ -64,6 +64,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -79,7 +80,8 @@ dependencies {
 
 
     implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+//    kapt("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:$room_version")
 
     // Kotlin and Coroutines

@@ -39,7 +39,19 @@ fun DetailEventScreen(
     val context = LocalContext.current
     val eventState = if (isActive) viewModel.eventActiveState else viewModel.eventNonActiveState
     val parsedEventId = eventId.toIntOrNull()
-    val event = parsedEventId?.let { id -> eventState.value.list.firstOrNull { it.id == id } }
+
+    // Handle invalid ID case
+    if (parsedEventId == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "Invalid event ID")
+        }
+        return
+    }
+
+    val event = eventState.value.list.firstOrNull { it.id == parsedEventId }
 
     event?.let { eventDetail ->
         var isFavorite by remember { mutableStateOf(false) }
@@ -165,7 +177,7 @@ fun DetailEventScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Event not found")
+            Text(text = "Event not found. It may have been removed.")
         }
     }
 }
