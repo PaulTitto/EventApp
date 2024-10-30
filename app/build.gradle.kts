@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt") // For Room annotation processing
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -16,10 +16,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = file("$projectDir/schemas").path
-            }
+        // Update to use KSP's arguments
+        ksp {
+            arg("room.schemaLocation", file("$projectDir/schemas").path)
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -48,7 +47,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
-        languageVersion = "1.9"
+        languageVersion = "2.0"
     }
 
     buildFeatures {
@@ -56,7 +55,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3" // Ensure this version matches your Compose setup
+        kotlinCompilerExtensionVersion = "1.5.3" // Adjust this to match your Compose version
     }
 
     packaging {
@@ -64,28 +63,27 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
 }
 
 dependencies {
-    // Room dependencies
+    // Dagger and Room KSP dependencies
+    implementation("com.google.dagger:dagger:2.51.1")
+    ksp("com.google.dagger:dagger-compiler:2.51.1")
+    ksp("androidx.room:room-compiler:2.5.0")
+
     val room_version = "2.5.0"
-    // LiveData and ViewModel dependencies
-    implementation(libs.androidx.lifecycle.livedata.ktx.v261)
-    //noinspection GradleDependency
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-
-// Compose LiveData support
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.3") // Match with your Compose version
-
-
     implementation("androidx.room:room-runtime:$room_version")
-//    kapt("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:$room_version")
 
+    // Other dependencies (unchanged)
+    implementation(libs.androidx.lifecycle.livedata.ktx.v261)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.3")
+
     // Kotlin and Coroutines
-    val kotlin_version = "1.8.0"
+//    val kotlin_version = "1.8.10"
+    val kotlin_version = "2.0.21"
+
     val coroutines_version = "1.6.0"
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
