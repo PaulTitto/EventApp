@@ -151,6 +151,7 @@ fun EventCard(
     }
 }
 
+
 @Composable
 fun EventCardContent(
     event: DetailEvent,

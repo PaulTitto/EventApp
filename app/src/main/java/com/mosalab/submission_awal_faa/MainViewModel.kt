@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import toDetailEvent
 
 class MainViewModel(
     private val database: AppDatabase,
@@ -59,6 +60,7 @@ class MainViewModel(
                     loading = false,
                     error = null
                 )
+                validateFavorites() // New line to sync favorites with the state
             } catch (e: Exception) {
                 state.value = state.value.copy(
                     loading = false,
@@ -67,6 +69,18 @@ class MainViewModel(
             }
         }
     }
+
+    // Function to validate favorites
+    private fun validateFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentEventIds = eventActiveState.value.list.map { it.id } +
+                    eventNonActiveState.value.list.map { it.id }
+            val favoritesToRemove = _favoriteEvents.value.filter { it.id !in currentEventIds }
+
+            favoritesToRemove.forEach { removeFavorite(it) } // Remove outdated favorites
+        }
+    }
+
     private val favoriteDao = database.favoriteEventDao()
     private fun loadFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -90,13 +104,15 @@ class MainViewModel(
         }
     }
 
-
-
-    // Remove favorite and refresh state
     fun removeFavorite(event: FavoriteEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             database.favoriteEventDao().deleteFavorite(event)
             loadFavorites() // Refresh after removing
+        }
+    }
+    suspend fun getFavoriteEventById(eventId: Int): DetailEvent? {
+        return withContext(Dispatchers.IO) {
+            database.favoriteEventDao().getFavoriteEventById(eventId)?.toDetailEvent()
         }
     }
 

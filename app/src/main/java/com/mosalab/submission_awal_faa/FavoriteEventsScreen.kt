@@ -80,6 +80,7 @@ fun FavoriteEvent.toDetailEvent(): DetailEvent {
 
 
 
+
 // Check if the FavoriteEvent is active
 fun FavoriteEvent.isActive(): Boolean {
     return (quota - registrants) > 0
