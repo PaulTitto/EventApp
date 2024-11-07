@@ -46,8 +46,10 @@ class MainViewModel(
     init {
         fetchEvents(active = "1", _eventActiveState)
         fetchEvents(active = "0", _eventNonActiveState)
-        loadFavorites() // Load initial favorites
+        loadFavorites()
+        validateFavorites()
     }
+
 
     // Fetch events from API
     private fun fetchEvents(active: String, state: MutableState<DetailEventState>) {
@@ -60,7 +62,7 @@ class MainViewModel(
                     loading = false,
                     error = null
                 )
-                validateFavorites() // New line to sync favorites with the state
+                validateFavorites()
             } catch (e: Exception) {
                 state.value = state.value.copy(
                     loading = false,
@@ -70,34 +72,36 @@ class MainViewModel(
         }
     }
 
-    // Function to validate favorites
     private fun validateFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
             val currentEventIds = eventActiveState.value.list.map { it.id } +
                     eventNonActiveState.value.list.map { it.id }
             val favoritesToRemove = _favoriteEvents.value.filter { it.id !in currentEventIds }
 
-            favoritesToRemove.forEach { removeFavorite(it) } // Remove outdated favorites
+            favoritesToRemove.forEach { removeFavorite(it) }
         }
     }
 
     private val favoriteDao = database.favoriteEventDao()
     private fun loadFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
-            database.favoriteEventDao().getAllFavorites().collect { favorites ->
-                Log.d("MainViewModel", "Loaded favorites: $favorites") // Log loaded favorites
-                _favoriteEvents.value = favorites
-            }
+            database.favoriteEventDao().getAllFavorites()
+                .distinctUntilChanged()
+                .collect { favorites ->
+                    Log.d("MainViewModel", "Loaded favorites: $favorites")
+                    _favoriteEvents.value = favorites
+                }
         }
     }
+
 
 
     fun addFavorite(event: FavoriteEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("MainViewModel", "Adding to favorites: $event") // Log event being added
+                Log.d("MainViewModel", "Adding to favorites: $event")
                 database.favoriteEventDao().insertFavorite(event)
-                loadFavorites() // Refresh after adding
+                loadFavorites()
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error adding to favorites: ${e.message}")
             }
@@ -107,7 +111,7 @@ class MainViewModel(
     fun removeFavorite(event: FavoriteEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             database.favoriteEventDao().deleteFavorite(event)
-            loadFavorites() // Refresh after removing
+            loadFavorites()
         }
     }
     suspend fun getFavoriteEventById(eventId: Int): DetailEvent? {
@@ -116,14 +120,12 @@ class MainViewModel(
         }
     }
 
-    // Check if the event is a favorite
     suspend fun isFavorite(eventId: Int): Boolean {
         return withContext(Dispatchers.IO) {
             database.favoriteEventDao().isFavorite(eventId)
         }
     }
 
-    // Data class to represent the state of events
     data class DetailEventState(
         val loading: Boolean = true,
         val list: List<DetailEvent> = emptyList(),

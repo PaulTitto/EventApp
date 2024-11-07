@@ -39,7 +39,6 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
 
-    // Simulate loading delay
     LaunchedEffect(Unit) {
         delay(2000)
         isLoading = false
@@ -64,7 +63,6 @@ fun HomeScreen(
                         .padding(paddingValues),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Header for Upcoming Events
                     item {
                         Text(
                             text = "Upcoming Events",
@@ -73,7 +71,6 @@ fun HomeScreen(
                         )
                     }
 
-                    // Displaying Upcoming Events in a LazyRow
                     item {
                         LazyRow(
                             modifier = Modifier
@@ -94,7 +91,6 @@ fun HomeScreen(
                         }
                     }
 
-                    // Header for Finished Events
                     item {
                         Text(
                             text = "Finished Events",
@@ -103,7 +99,6 @@ fun HomeScreen(
                         )
                     }
 
-                    // Displaying Finished Events in LazyColumn
                     items(nonActiveState.list) { event ->
                         EventCard(
                             event = event,

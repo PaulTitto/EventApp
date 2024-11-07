@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
@@ -56,7 +57,6 @@ fun DetailEventScreen(
         }
     }
 
-    // Display loading if event data is not yet loaded
     if (event.value == null) {
         LoadingContent(isLoading = true, error = null) { }
     } else {
@@ -150,10 +150,22 @@ fun EventDetailContent(eventDetail: DetailEvent, viewModel: MainViewModel) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = eventDetail.name, style = MaterialTheme.typography.titleSmall)
+                Text(
+                    text = eventDetail.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = Int.MAX_VALUE,
+                    overflow = TextOverflow.Ellipsis
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Summary: ${eventDetail.summary}", style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Summary: ${eventDetail.summary}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = Int.MAX_VALUE,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+
+
                 Text(text = HtmlCompat.fromHtml(eventDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT).toString(), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Owner: ${eventDetail.ownerName}", style = MaterialTheme.typography.bodyMedium)

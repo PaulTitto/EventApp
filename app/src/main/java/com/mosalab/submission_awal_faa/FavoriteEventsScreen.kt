@@ -35,9 +35,8 @@ fun FavoriteEventsScreen(viewModel: MainViewModel, navController: NavController)
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues).padding(bottom = 42.dp)
                 ) {
-                    // Log the list to ensure correct data is being passed
                     Log.d("FavoriteEventsScreen", "Rendering favorites: $favoriteEvents")
 
                     items(favoriteEvents) { event ->
@@ -74,14 +73,13 @@ fun FavoriteEvent.toDetailEvent(): DetailEvent {
         endTime = endTime,
         link = link
     )
-    Log.d("FavoriteEvent", "Converted to DetailEvent: $detailEvent") // Log conversion
+    Log.d("FavoriteEvent", "Converted to DetailEvent: $detailEvent")
     return detailEvent
 }
 
 
 
 
-// Check if the FavoriteEvent is active
 fun FavoriteEvent.isActive(): Boolean {
     return (quota - registrants) > 0
 }

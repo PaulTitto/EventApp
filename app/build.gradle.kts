@@ -55,7 +55,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3" // Adjust this to match your Compose version
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packaging {

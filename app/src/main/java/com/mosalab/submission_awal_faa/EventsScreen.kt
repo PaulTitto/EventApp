@@ -15,8 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.mosalab.submission_awal_faa.Data.DetailEvent
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +121,6 @@ fun EventCard(
 ) {
     var isFavorite by remember { mutableStateOf(false) }
 
-    // Load the favorite state in the background
     LaunchedEffect(event.id) {
         isFavorite = withContext(Dispatchers.IO) {
             viewModel.isFavorite(event.id)
@@ -144,7 +149,7 @@ fun EventCard(
                         viewModel.addFavorite(event.toFavoriteEvent())
                         Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
                     }
-                    isFavorite = !isFavorite // Toggle favorite state
+                    isFavorite = !isFavorite
                 }
             }
         )
@@ -165,14 +170,28 @@ fun EventCardContent(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(model = event.imageLogo),
-            contentDescription = null,
-            modifier = Modifier
-                .weight(1f)
-                .height(100.dp),
-            contentScale = ContentScale.Crop
-        )
+        Box(modifier = Modifier
+            .weight(1f)
+            .height(100.dp)) {
+
+            val painter = rememberAsyncImagePainter(
+                model = event.imageLogo,
+            )
+
+            if (painter.state is AsyncImagePainter.State.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
+
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -183,13 +202,14 @@ fun EventCardContent(
         ) {
             Text(
                 text = event.name,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
+                style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold),
+                maxLines = Int.MAX_VALUE,
+                overflow = TextOverflow.Clip,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
-                text = "Summary: ${event.summary}",
-                style = MaterialTheme.typography.bodySmall,
+                text = event.summary,
+                style = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.W200),
                 maxLines = 2
             )
         }
