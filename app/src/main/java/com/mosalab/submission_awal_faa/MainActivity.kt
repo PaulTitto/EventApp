@@ -1,6 +1,6 @@
 package com.mosalab.submission_awal_faa
 
-import FavoriteEventsScreen
+import com.mosalab.submission_awal_faa.Screen.FavoriteEventsScreen
 import MainViewModelFactory
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -21,7 +21,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mosalab.submission_awal_faa.Data.AppDatabase
+import com.mosalab.submission_awal_faa.core.Data.AppDatabase
+import com.mosalab.submission_awal_faa.Screen.DetailEventActiveScreen
+import com.mosalab.submission_awal_faa.Screen.DetailEventNonActiveScreen
+import com.mosalab.submission_awal_faa.Screen.DetailEventScreen
+import com.mosalab.submission_awal_faa.Screen.HomeScreen
 import com.mosalab.submission_awal_faa.Screen.SettingsScreen
 import com.mosalab.submission_awal_faa.ui.theme.SubmissionawalfaaTheme
 
@@ -30,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val database = AppDatabase.getDatabase(applicationContext)
+            val database = com.mosalab.submission_awal_faa.core.Data.AppDatabase.getDatabase(applicationContext)
             val preferencesManager = PreferencesManager(applicationContext)
 
             val mainViewModel: MainViewModel = ViewModelProvider(

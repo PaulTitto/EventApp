@@ -1,6 +1,6 @@
-package com.mosalab.submission_awal_faa.Service
+package com.mosalab.submission_awal_faa.core.Service
 
-import com.mosalab.submission_awal_faa.Data.DetailEventResponse
+import com.mosalab.submission_awal_faa.core.Data.DetailEventResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

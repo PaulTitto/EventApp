@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "submission-awal-faa"
 include(":app")
+include(":core")
+include(":favorite")

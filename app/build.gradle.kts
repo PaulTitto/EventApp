@@ -63,9 +63,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    dynamicFeatures += setOf(":favorite")
 }
 
 dependencies {
+
+    implementation(project(":core"))
+
+
     // Dagger and Room KSP dependencies
     implementation("com.google.dagger:dagger:2.51.1")
     ksp("com.google.dagger:dagger-compiler:2.51.1")

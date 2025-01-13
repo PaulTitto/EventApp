@@ -1,6 +1,6 @@
 @file:Suppress("NAME_SHADOWING")
 
-package com.mosalab.submission_awal_faa
+package com.mosalab.submission_awal_faa.Screen
 
 import android.content.Intent
 import android.net.Uri
@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.mosalab.submission_awal_faa.Data.DetailEvent
-import com.mosalab.submission_awal_faa.Data.FavoriteEvent
+import com.mosalab.submission_awal_faa.MainViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +47,7 @@ fun DetailEventScreen(
     }
 
     // Collect event state changes
-    val event = remember { mutableStateOf<DetailEvent?>(null) }
+    val event = remember { mutableStateOf<com.mosalab.submission_awal_faa.core.Data.DetailEvent?>(null) }
     LaunchedEffect(parsedEventId) {
         event.value = eventState.value.list.firstOrNull { it.id == parsedEventId }
             ?: viewModel.getFavoriteEventById(parsedEventId)
@@ -66,7 +65,7 @@ fun DetailEventScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventDetailContent(eventDetail: DetailEvent, viewModel: MainViewModel) {
+fun EventDetailContent(eventDetail: com.mosalab.submission_awal_faa.core.Data.DetailEvent, viewModel: MainViewModel) {
     val context = LocalContext.current
     var isFavorite by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -199,7 +198,7 @@ fun EventDetailContent(eventDetail: DetailEvent, viewModel: MainViewModel) {
     )
 }
 
-fun shareEvent(context: android.content.Context, eventDetail: DetailEvent) {
+fun shareEvent(context: android.content.Context, eventDetail: com.mosalab.submission_awal_faa.core.Data.DetailEvent) {
     val shareIntent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(
@@ -239,8 +238,8 @@ fun LoadingContent(isLoading: Boolean, error: String?, content: @Composable () -
     }
 }
 
-fun DetailEvent.toFavoriteEvent(): FavoriteEvent {
-    return FavoriteEvent(
+fun com.mosalab.submission_awal_faa.core.Data.DetailEvent.toFavoriteEvent(): com.mosalab.submission_awal_faa.core.Data.FavoriteEvent {
+    return com.mosalab.submission_awal_faa.core.Data.FavoriteEvent(
         id, name, summary, description, imageLogo, mediaCover, category,
         ownerName, cityName, quota, registrants, beginTime, endTime, link
     )

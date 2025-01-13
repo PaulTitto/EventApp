@@ -1,4 +1,4 @@
-package com.mosalab.submission_awal_faa
+package com.mosalab.submission_awal_faa.Screen
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,7 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import com.mosalab.submission_awal_faa.Data.DetailEvent
+import com.mosalab.submission_awal_faa.core.Data.DetailEvent
+import com.mosalab.submission_awal_faa.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -84,7 +84,7 @@ fun DetailEventNonActiveScreen(viewModel: MainViewModel, navController: NavContr
 
 @Composable
 fun EventList(
-    events: List<DetailEvent>,
+    events: List<com.mosalab.submission_awal_faa.core.Data.DetailEvent>,
     navController: NavController,
     viewModel: MainViewModel,
     isActive: Boolean,
@@ -112,7 +112,7 @@ fun EventList(
 
 @Composable
 fun EventCard(
-    event: DetailEvent,
+    event: com.mosalab.submission_awal_faa.core.Data.DetailEvent,
     navController: NavController,
     isActive: Boolean,
     viewModel: MainViewModel,
@@ -159,7 +159,7 @@ fun EventCard(
 
 @Composable
 fun EventCardContent(
-    event: DetailEvent,
+    event: com.mosalab.submission_awal_faa.core.Data.DetailEvent,
     isFavorite: Boolean,
     onFavoriteClick: () -> Unit
 ) {
@@ -228,7 +228,7 @@ fun EventCardContent(
 }
 
 fun toggleFavorite(
-    event: DetailEvent,
+    event: com.mosalab.submission_awal_faa.core.Data.DetailEvent,
     viewModel: MainViewModel,
     coroutineScope: CoroutineScope,
     context: android.content.Context

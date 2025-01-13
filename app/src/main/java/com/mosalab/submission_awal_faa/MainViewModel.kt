@@ -6,18 +6,18 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mosalab.submission_awal_faa.Data.AppDatabase
-import com.mosalab.submission_awal_faa.Data.DetailEvent
-import com.mosalab.submission_awal_faa.Data.FavoriteEvent
-import com.mosalab.submission_awal_faa.Service.ApiService
+import com.mosalab.submission_awal_faa.core.Data.AppDatabase
+import com.mosalab.submission_awal_faa.core.Data.DetailEvent
+import com.mosalab.submission_awal_faa.core.Data.FavoriteEvent
+import com.mosalab.submission_awal_faa.core.Service.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import toDetailEvent
+import com.mosalab.submission_awal_faa.Screen.toDetailEvent
 
 class MainViewModel(
-    private val database: AppDatabase,
+    private val database: com.mosalab.submission_awal_faa.core.Data.AppDatabase,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
@@ -39,8 +39,8 @@ class MainViewModel(
     val eventNonActiveState: State<DetailEventState> = _eventNonActiveState
 
     // StateFlow for favorites
-    private val _favoriteEvents = MutableStateFlow<List<FavoriteEvent>>(emptyList())
-    val favoriteEvents: StateFlow<List<FavoriteEvent>> = _favoriteEvents.asStateFlow()
+    private val _favoriteEvents = MutableStateFlow<List<com.mosalab.submission_awal_faa.core.Data.FavoriteEvent>>(emptyList())
+    val favoriteEvents: StateFlow<List<com.mosalab.submission_awal_faa.core.Data.FavoriteEvent>> = _favoriteEvents.asStateFlow()
 
 
     init {
@@ -56,7 +56,7 @@ class MainViewModel(
         viewModelScope.launch {
             state.value = state.value.copy(loading = true)
             try {
-                val response = ApiService.apiService.getEvents(active)
+                val response = com.mosalab.submission_awal_faa.core.Service.ApiService.apiService.getEvents(active)
                 state.value = state.value.copy(
                     list = response.listEvents,
                     loading = false,
@@ -96,7 +96,7 @@ class MainViewModel(
 
 
 
-    fun addFavorite(event: FavoriteEvent) {
+    fun addFavorite(event: com.mosalab.submission_awal_faa.core.Data.FavoriteEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.d("MainViewModel", "Adding to favorites: $event")
@@ -108,13 +108,13 @@ class MainViewModel(
         }
     }
 
-    fun removeFavorite(event: FavoriteEvent) {
+    fun removeFavorite(event: com.mosalab.submission_awal_faa.core.Data.FavoriteEvent) {
         viewModelScope.launch(Dispatchers.IO) {
             database.favoriteEventDao().deleteFavorite(event)
             loadFavorites()
         }
     }
-    suspend fun getFavoriteEventById(eventId: Int): DetailEvent? {
+    suspend fun getFavoriteEventById(eventId: Int): com.mosalab.submission_awal_faa.core.Data.DetailEvent? {
         return withContext(Dispatchers.IO) {
             database.favoriteEventDao().getFavoriteEventById(eventId)?.toDetailEvent()
         }
@@ -128,7 +128,7 @@ class MainViewModel(
 
     data class DetailEventState(
         val loading: Boolean = true,
-        val list: List<DetailEvent> = emptyList(),
+        val list: List<com.mosalab.submission_awal_faa.core.Data.DetailEvent> = emptyList(),
         val error: String? = null
     )
 }

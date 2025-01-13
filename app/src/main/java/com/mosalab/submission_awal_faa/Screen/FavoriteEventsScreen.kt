@@ -1,3 +1,5 @@
+package com.mosalab.submission_awal_faa.Screen
+
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,10 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.mosalab.submission_awal_faa.Data.DetailEvent
-import com.mosalab.submission_awal_faa.Data.FavoriteEvent
 import com.mosalab.submission_awal_faa.MainViewModel
-import com.mosalab.submission_awal_faa.EventCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,8 +55,8 @@ fun FavoriteEventsScreen(viewModel: MainViewModel, navController: NavController)
 }
 
 
-fun FavoriteEvent.toDetailEvent(): DetailEvent {
-    val detailEvent = DetailEvent(
+fun com.mosalab.submission_awal_faa.core.Data.FavoriteEvent.toDetailEvent(): com.mosalab.submission_awal_faa.core.Data.DetailEvent {
+    val detailEvent = com.mosalab.submission_awal_faa.core.Data.DetailEvent(
         id = id,
         name = name,
         summary = summary,
@@ -80,6 +79,6 @@ fun FavoriteEvent.toDetailEvent(): DetailEvent {
 
 
 
-fun FavoriteEvent.isActive(): Boolean {
+fun com.mosalab.submission_awal_faa.core.Data.FavoriteEvent.isActive(): Boolean {
     return (quota - registrants) > 0
 }

@@ -1,11 +1,11 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mosalab.submission_awal_faa.Data.AppDatabase
+import com.mosalab.submission_awal_faa.core.Data.AppDatabase
 import com.mosalab.submission_awal_faa.MainViewModel
 import com.mosalab.submission_awal_faa.PreferencesManager
 
 class MainViewModelFactory(
-    private val database: AppDatabase,
+    private val database: com.mosalab.submission_awal_faa.core.Data.AppDatabase,
     private val preferencesManager: PreferencesManager
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

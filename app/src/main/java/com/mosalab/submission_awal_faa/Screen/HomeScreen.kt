@@ -1,4 +1,4 @@
-package com.mosalab.submission_awal_faa
+package com.mosalab.submission_awal_faa.Screen
 
 import MainViewModelFactory
 import androidx.compose.foundation.layout.*
@@ -19,9 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.mosalab.submission_awal_faa.Data.AppDatabase
+import com.mosalab.submission_awal_faa.core.Data.AppDatabase
+import com.mosalab.submission_awal_faa.MainViewModel
+import com.mosalab.submission_awal_faa.PreferencesManager
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +30,7 @@ fun HomeScreen(
     navController: NavController,
     viewModel: MainViewModel = viewModel(
         factory = MainViewModelFactory(
-            AppDatabase.getDatabase(LocalContext.current),
+            com.mosalab.submission_awal_faa.core.Data.AppDatabase.getDatabase(LocalContext.current),
             PreferencesManager(LocalContext.current)
         )
     )

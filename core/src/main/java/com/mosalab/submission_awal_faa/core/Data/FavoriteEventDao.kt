@@ -1,4 +1,4 @@
-package com.mosalab.submission_awal_faa.Data
+package com.mosalab.submission_awal_faa.core.Data
 
 import androidx.room.Dao
 import androidx.room.Insert
